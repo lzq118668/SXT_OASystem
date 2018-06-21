@@ -8,7 +8,7 @@
 		<setting name="logImpl" value="LOG4J" />
 	</settings>
 	<typeAliases>
-		<package name="com.bjsxt.pojo" />
+		<package name="com.bjsxt.*.pojo" />
 	</typeAliases>
 	<environments default="dev">
 		<environment id="dev">
@@ -22,6 +22,6 @@
 		</environment>
 	</environments>
 	<mappers>
-		<package name="com.bjsxt.mapper" />
+		<package name="com.bjsxt.*.mapper" />
 	</mappers>
 </configuration>

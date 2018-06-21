@@ -10,7 +10,7 @@ import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 /**
  * MyBatis工具类
  * 
- * @author Administrator
+ * @author leo
  *
  */
 public class MyBatisUtil {
@@ -29,7 +29,7 @@ public class MyBatisUtil {
 	/**
 	 * 获取SqlSession
 	 * 
-	 * @return
+	 * @return {@ SqlSession}
 	 */
 	public static SqlSession getSession() {
 		if (tl.get() == null) {

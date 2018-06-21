@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bjsxt.base.mapper.MenuMapper">
+    <resultMap id="mmap" type="menu">
+           <id property="id" column="id"></id>
+          <collection property="subMenu" select="selMenus" column="pid=id,rid=rid"></collection>
+    </resultMap>
+    <select id="selMenus" resultMap="mmap">
+        SELECT m.*,#{rid} rid
+        FROM t_role_menu rm
+        LEFT JOIN t_menu m
+        ON rm.rid=#{rid}
+        WHERE m.id=rm.mid AND m.pid=#{pid};
+    </select>
+</mapper>

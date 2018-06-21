@@ -12,6 +12,15 @@ public class BaseServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
 
+	/**
+	* 封装Servlet的service方法 通过反射调用继承该类的方法并执行。
+	*
+	*@author leo
+	*@param  req
+	*@param resp
+	*@return
+	*/
+
 	@Override
 	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		req.setCharacterEncoding("UTF-8");

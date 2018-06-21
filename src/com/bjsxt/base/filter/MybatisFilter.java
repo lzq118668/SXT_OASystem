@@ -20,6 +20,15 @@ public class MybatisFilter implements Filter {
 	public void init(FilterConfig filterConfig) throws ServletException {
 	}
 
+	/**
+	* 封装session的获取和关闭，以及事务的提交。
+	*
+	*@author leo
+	 *@param request
+	 *@param response
+	 *@param chain
+	*@return
+	*/
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
