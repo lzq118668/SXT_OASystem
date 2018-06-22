@@ -53,7 +53,7 @@
                 <li class="yzm">
 
                     <span><input id="checkcode" name="checkcode" type="text" value="验证码"
-                                 onclick="JavaScript:this.value=''"/></span><cite id="code">${sessionScope.piccode}</cite>
+                                 onclick="JavaScript:this.value=''"/></span><cite id="code"></cite>
 
                 </li>
                 <li><input id="logBtn" type="button" class="loginbtn" value="登录"/><label>
@@ -70,18 +70,40 @@
 </body>
 
 <script type="text/javascript">
+
     $(function () {
         $("#logBtn").click(function () {
-            $("#fm").submit();
+            $.ajax({
+                type:"POST",
+                data:{
+                    "op":"check",
+                    "checkcode":$("#checkcode").val()
+                },
+                url : "login.action",
+                success : function (result) {
+                      console.log(result);
+
+                    if(result){  //flag
+                        $("#fm").submit();
+                    }else{
+                        alert("验证码错误！");
+                    }
+                }
+            })
+
+
         });
+
          $.ajax({
              type:"POST",
              data:{"op":"createCode"},
              url : "login.action",
-             success : function (result) {
-
+             success : function (result){
+                $("#code").html(result);
              }
          })
+
+
     });
 </script>
 </html>

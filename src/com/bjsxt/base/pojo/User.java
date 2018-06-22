@@ -1,15 +1,17 @@
 package com.bjsxt.base.pojo;
 
+import com.bjsxt.employee.pojo.Signin;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
 /**
-* 用户实体类
-*
-*@author leo
-*/
+ * 用户实体类
+ *
+ * @author leo
+ */
 
 public class User implements Serializable {
 
@@ -115,20 +117,26 @@ public class User implements Serializable {
     private int mgr;
 
     /**
-    * 角色ID
-    */
+     * 角色ID
+     */
 
     private int rid;
 
     /**
-    *菜单
-    */
+     * 菜单
+     */
     private List<Menu> menus;
 
+
     /**
-    *用户角色
-    */
+     * 用户角色
+     */
     private Role role;
+
+    /**
+    *签到信息
+    */
+    private List<Signin> signins;
 
     public User() {
     }
@@ -293,6 +301,14 @@ public class User implements Serializable {
         this.role = role;
     }
 
+    public List<Signin> getSignins() {
+        return signins;
+    }
+
+    public void setSignins(List<Signin> signins) {
+        this.signins = signins;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -317,13 +333,14 @@ public class User implements Serializable {
                 Objects.equals(contacts, user.contacts) &&
                 Objects.equals(idcard, user.idcard) &&
                 Objects.equals(menus, user.menus) &&
-                Objects.equals(role, user.role);
+                Objects.equals(role, user.role) &&
+                Objects.equals(signins, user.signins);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(id, username, password, name, gender, birthday, hiredate, leavedate, isjob, emptype, phone, qq, contacts, idcard, jid, did, mgr, rid, menus, role);
+        return Objects.hash(id, username, password, name, gender, birthday, hiredate, leavedate, isjob, emptype, phone, qq, contacts, idcard, jid, did, mgr, rid, menus, role, signins);
     }
 
     @Override
@@ -349,6 +366,7 @@ public class User implements Serializable {
                 ", rid=" + rid +
                 ", menus=" + menus +
                 ", role=" + role +
+                ", signins=" + signins +
                 '}';
     }
 }

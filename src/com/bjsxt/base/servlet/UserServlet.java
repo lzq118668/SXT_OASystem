@@ -40,6 +40,8 @@ public class UserServlet extends BaseServlet {
         String piccode = (String) req.getSession().getAttribute("piccode");
         String checkcode = req.getParameter("checkcode");
         resp.setContentType("text/html;charset=utf-8");
+        System.out.println(checkcode);
+        System.out.println(piccode);
         if (checkcode.equalsIgnoreCase(piccode)) {
             resp.getWriter().print("ture");
         } else {
@@ -58,7 +60,6 @@ public class UserServlet extends BaseServlet {
             index = r.nextInt(len);
             sb.append(ch[index]);
         }
-        System.out.println(sb.toString());
         //把验证码字符串放入Session
         req.getSession().setAttribute("piccode", sb.toString());
         resp.getWriter().print(sb.toString());
