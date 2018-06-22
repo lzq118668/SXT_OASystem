@@ -53,7 +53,7 @@
                 <li class="yzm">
 
                     <span><input id="checkcode" name="checkcode" type="text" value="验证码"
-                                 onclick="JavaScript:this.value=''"/></span><cite id="code">${SessionScope.checkcode}</cite>
+                                 onclick="JavaScript:this.value=''"/></span><cite id="code">${sessionScope.piccode}</cite>
 
                 </li>
                 <li><input id="logBtn" type="button" class="loginbtn" value="登录"/><label>
@@ -71,39 +71,17 @@
 
 <script type="text/javascript">
     $(function () {
-        $("#mark").hidden;
-
-        $.post("login.action",
-            ,)
-        $("#code")
-
-
-        var code;
         $("#logBtn").click(function () {
+            $("#fm").submit();
+        });
+         $.ajax({
+             type:"POST",
+             data:{"op":"createCode"},
+             url : "login.action",
+             success : function (result) {
 
-            if(code == $("#checkcode").val()){
-                $("#fm").submit();
-            }else{
-                alert("验证码有误请重新输入!");
-            }
-
-        })
-        $("#checkcode").blur(function () {
-            $.post("login.action",
-                {
-                    op : login,
-                    checkcode: $("#checkcode").val()
-                }
-                ,function (result) {
-                code =result;
-
-            })
-            if(code == $("#checkcode").val()){
-                 $("#mark").show();
-            }
-        })
-    })
-
-
+             }
+         })
+    });
 </script>
 </html>

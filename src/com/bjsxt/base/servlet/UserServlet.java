@@ -47,8 +47,8 @@ public class UserServlet extends BaseServlet {
         }
     }
 
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+    public void createCode(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         char[] ch = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".toCharArray();
         Random r = new Random();
         int len = ch.length;
@@ -58,9 +58,9 @@ public class UserServlet extends BaseServlet {
             index = r.nextInt(len);
             sb.append(ch[index]);
         }
+        System.out.println(sb.toString());
         //把验证码字符串放入Session
         req.getSession().setAttribute("piccode", sb.toString());
-
-        super.doGet(req, resp);
+        resp.getWriter().print(sb.toString());
     }
 }
