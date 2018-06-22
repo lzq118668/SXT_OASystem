@@ -22,11 +22,16 @@ public class UserServlet extends BaseServlet {
 
 
         User user = userService.selUser(username, password);
-        req.setAttribute("user", user);
+        req.getSession().setAttribute("user", user);
+        //check(req,resp);
         if(user != null){
-            req.getRequestDispatcher(req.getContextPath()+"/main.jsp");
+            user.setPassword(null);
+            req.getSession().setAttribute("user", user);
+            // 页面跳转
+            resp.sendRedirect(req.getContextPath() + "/main.jsp");
         }else{
-            req.setAttribute("msg","用户名或密码不正确请重新输入！");
+            req.getSession().setAttribute("msg", "用户名或密码错误, 请重新登录!");
+            resp.sendRedirect(req.getContextPath() + "/login.jsp");
         }
 
     }

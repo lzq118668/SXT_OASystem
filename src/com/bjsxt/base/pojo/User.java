@@ -115,6 +115,12 @@ public class User implements Serializable {
     private int mgr;
 
     /**
+    * 角色ID
+    */
+
+    private int rid;
+
+    /**
     *菜单
     */
     private List<Menu> menus;
@@ -263,6 +269,14 @@ public class User implements Serializable {
         this.mgr = mgr;
     }
 
+    public int getRid() {
+        return rid;
+    }
+
+    public void setRid(int rid) {
+        this.rid = rid;
+    }
+
     public List<Menu> getMenus() {
         return menus;
     }
@@ -290,6 +304,7 @@ public class User implements Serializable {
                 jid == user.jid &&
                 did == user.did &&
                 mgr == user.mgr &&
+                rid == user.rid &&
                 Objects.equals(username, user.username) &&
                 Objects.equals(password, user.password) &&
                 Objects.equals(name, user.name) &&
@@ -308,7 +323,7 @@ public class User implements Serializable {
     @Override
     public int hashCode() {
 
-        return Objects.hash(id, username, password, name, gender, birthday, hiredate, leavedate, isjob, emptype, phone, qq, contacts, idcard, jid, did, mgr, menus, role);
+        return Objects.hash(id, username, password, name, gender, birthday, hiredate, leavedate, isjob, emptype, phone, qq, contacts, idcard, jid, did, mgr, rid, menus, role);
     }
 
     @Override
@@ -331,6 +346,7 @@ public class User implements Serializable {
                 ", jid=" + jid +
                 ", did=" + did +
                 ", mgr=" + mgr +
+                ", rid=" + rid +
                 ", menus=" + menus +
                 ", role=" + role +
                 '}';

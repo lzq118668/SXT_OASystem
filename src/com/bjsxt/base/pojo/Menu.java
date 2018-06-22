@@ -35,7 +35,7 @@ public class Menu implements Serializable {
     /**
      * 子菜单集合
      */
-    private List<Menu> subMeau;
+    private List<Menu> subMenu;
 
     public Menu() {
     }
@@ -80,12 +80,12 @@ public class Menu implements Serializable {
         this.remark = remark;
     }
 
-    public List<Menu> getSubMeau() {
-        return subMeau;
+    public List<Menu> getSubMenu() {
+        return subMenu;
     }
 
-    public void setSubMeau(List<Menu> subMeau) {
-        this.subMeau = subMeau;
+    public void setSubMenu(List<Menu> subMenu) {
+        this.subMenu = subMenu;
     }
 
     @Override
@@ -98,13 +98,13 @@ public class Menu implements Serializable {
                 Objects.equals(mname, menu.mname) &&
                 Objects.equals(url, menu.url) &&
                 Objects.equals(remark, menu.remark) &&
-                Objects.equals(subMeau, menu.subMeau);
+                Objects.equals(subMenu, menu.subMenu);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(id, mname, url, pid, remark, subMeau);
+        return Objects.hash(id, mname, url, pid, remark, subMenu);
     }
 
     @Override
@@ -115,7 +115,7 @@ public class Menu implements Serializable {
                 ", url='" + url + '\'' +
                 ", pid=" + pid +
                 ", remark='" + remark + '\'' +
-                ", subMeau=" + subMeau +
+                ", subMenu=" + subMenu +
                 '}';
     }
 }

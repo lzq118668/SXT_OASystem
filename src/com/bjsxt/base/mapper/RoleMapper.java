@@ -5,7 +5,7 @@ import org.apache.ibatis.annotations.Select;
 
 public interface RoleMapper {
 
-    @Select("select * from t_role where rid=#{0}")
+    @Select("select * from t_role where id=#{0}")
     Role selRole(int rid);
 
 }
