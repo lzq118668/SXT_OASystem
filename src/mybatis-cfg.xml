@@ -9,6 +9,7 @@
 	</settings>
 	<typeAliases>
 		<package name="com.bjsxt.base.pojo" />
+		<package name="com.bjsxt.employee.pojo" />
 	</typeAliases>
 	<environments default="dev">
 		<environment id="dev">
@@ -23,5 +24,7 @@
 	</environments>
 	<mappers>
 		<package name="com.bjsxt.base.mapper" />
+		<package name="com.bjsxt.employee.mapper" />
+
 	</mappers>
 </configuration>

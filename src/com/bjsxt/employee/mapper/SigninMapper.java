@@ -5,7 +5,7 @@ import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
-import java.sql.Time;
+import java.sql.Date;
 import java.util.List;
 
 public interface SigninMapper {
@@ -18,7 +18,7 @@ public interface SigninMapper {
     *@return int
     */
 
-    @Insert("insert into t_attendance values (default,#{uid},curtime(),date_formate(now(),'%y-%m-%d'),null)")
+    @Insert("insert into t_attendance values (default,#{uid},curtime(),date_format(now(),'%y-%m-%d'),null)")
     int insSign(Signin signin);
 
     /**
@@ -42,4 +42,14 @@ public interface SigninMapper {
     */
     @Update("update t_attendance set qtdate=curtime() where id=#{0}")
     int insSignout(int id);
+
+    /**
+    * 根据日期查看当天的签到信息， 获取当天签到记录ID
+    *
+    *@author leo
+    *@param date
+    *@return {@link Signin}
+    */
+    @Select("select * from t_attendance where attdate=#{0}")
+    Signin selToday(Date date);
 }

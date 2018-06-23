@@ -59,7 +59,7 @@
 				<div class="title"><span><img src="images/leftico03.png" /></span>${menu.mname}</div>
 				<ul class="menuson">
 					<c:forEach items="${menu.subMenu}" var="submenu">
-					<li><cite></cite><a href="attributes:{'url':'${submenu.url }" target="rightFrame">${submenu.mname}</a><i></i></li>
+					<li><cite></cite><a href="${submenu.url }" target="rightFrame">${submenu.mname}</a><i></i></li>
 					</c:forEach>
 				</ul>
 			</dd>

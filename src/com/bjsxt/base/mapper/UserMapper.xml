@@ -4,7 +4,6 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.bjsxt.base.mapper.UserMapper">
     <resultMap id="umap" type="user">
-        <association property="signin" select="com.bjsxt.employee.mapper.SigninMapper.selSign" column="id"></association>
         <association property="role" select="com.bjsxt.base.mapper.RoleMapper.selRole" column="rid"></association>
         <collection property="menus" select="com.bjsxt.base.mapper.MenuMapper.selMenus" column="rid=rid,pid=pid"></collection>
     </resultMap>

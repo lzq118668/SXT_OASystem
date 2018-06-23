@@ -2,6 +2,7 @@ package com.bjsxt.employee.service;
 
 import com.bjsxt.employee.pojo.Signin;
 
+import java.sql.Date;
 import java.util.List;
 
 public interface SigninService {
@@ -34,4 +35,14 @@ public interface SigninService {
     *@return int
     */
     int insSignout(String id);
+
+
+    /**
+     * 根据日期查看当天的签到信息， 获取当天签到记录ID
+     *
+     *@author leo
+     *@param date
+     *@return {@link Signin}
+     */
+    Signin selToday(Date date);
 }

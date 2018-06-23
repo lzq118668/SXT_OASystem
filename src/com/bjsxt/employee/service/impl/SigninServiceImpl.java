@@ -5,7 +5,7 @@ import com.bjsxt.employee.mapper.SigninMapper;
 import com.bjsxt.employee.pojo.Signin;
 import com.bjsxt.employee.service.SigninService;
 
-import java.sql.Time;
+import java.sql.Date;
 import java.util.List;
 
 public class SigninServiceImpl implements SigninService {
@@ -28,5 +28,11 @@ public class SigninServiceImpl implements SigninService {
         SigninMapper mapper = MyBatisUtil.getSession().getMapper(SigninMapper.class);
         int tmid = Integer.parseInt(id);
         return mapper.insSignout(tmid);
+    }
+
+    @Override
+    public Signin selToday(Date date) {
+        SigninMapper mapper = MyBatisUtil.getSession().getMapper(SigninMapper.class);
+        return mapper.selToday(date);
     }
 }
