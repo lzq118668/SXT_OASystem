@@ -79,6 +79,7 @@
                     "op":"check",
                     "checkcode":$("#checkcode").val()
                 },
+                contentType:"application/x-www-form-urlencoded",
                 url : "login.action",
                 success : function (result) {
                       console.log(result);

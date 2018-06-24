@@ -64,4 +64,32 @@ public class UserServlet extends BaseServlet {
         req.getSession().setAttribute("piccode", sb.toString());
         resp.getWriter().print(sb.toString());
     }
+
+    public void modify(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+        String id = req.getParameter("id");
+        String phone = req.getParameter("phone");
+        String qq = req.getParameter("qq");
+        String contacts = req.getParameter("contacts");
+
+        int i = userService.insUser(Integer.parseInt(id), phone, qq, contacts);
+
+        resp.setCharacterEncoding("Utf-8");
+
+        if(i>0){
+
+            resp.getWriter().print("更新成功！");
+            req.getRequestDispatcher("Empoyee/myInfo.jsp").forward(req,resp);
+        }else{
+            resp.getWriter().print("更新失败请重试！");
+            resp.sendRedirect(req.getContextPath()+"Empoyee/updateInfo.jsp");
+        }
+    }
+
+    public void selUserById(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        String id = req.getParameter("id");
+        
+        User user = userService.selUserById(Integer.parseInt(id));
+        req.getSession().setAttribute("user",user);
+
+    }
 }

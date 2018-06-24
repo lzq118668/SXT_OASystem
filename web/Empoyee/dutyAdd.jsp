@@ -24,15 +24,18 @@
     <div class="formtitle"><span>基本信息</span></div>
 
     <form id="signfm" action="sign.action" method="post">
-        <input type="hidden" name="op" value="signin">
-        <input type="hidden" name="id" value="${sessionScope.user.id}">
 
-    <ul class="forminfo">
-        <li><label>&nbsp;</label><input id="sign" name="sign" type="button" class="btn" value="签到"/> 每天签到一次，不可重复签到</li>
-        <li><label>&nbsp;</label></li>
-        <li><label>&nbsp;</label></li>
-        <li><label>&nbsp;</label><input id="signout" name="signout" type="button" class="btn" value="签退"/>可重复签退，以最后一次签退为准</li>
-    </ul>
+        <ul class="forminfo">
+            <li><label>&nbsp;</label>
+                <input id="sign" name="sign" type="button" class="btn" value="签到"/> 每天签到一次，不可重复签到
+            </li>
+            <li><label>&nbsp;</label></li>
+            <input id="dissign" name="sign" type="button" class="btn-disable" value="已签到" disabled/> </li>
+            <li><label>&nbsp;</label></li>
+            <li><label>&nbsp;</label></li>
+            <li><label>&nbsp;</label><input id="signout" name="signout" type="button" class="btn" value="签退"/>可重复签退，以最后一次签退为准
+            </li>
+        </ul>
     </form>
 
 </div>
@@ -43,11 +46,69 @@
 <script type="text/javascript">
 
     $(function () {
-        $("#sign").click(function () {
-             $("#signfm").submit();
-             alert(req.getAttribute("msg"));
+        var flag;
+        var date = new Date();
+        var seperator1 = "-";
+        var seperator2 = ":";
+        var month = date.getMonth() + 1;
+        var strDate = date.getDate();
+        if ((month >= 1) && (month <= 9)) {
+            month = "0" + month;
+        }
+        if (strDate >= 0 && strDate <= 9) {
+            strDate = "0" + strDate;
+        }
+        var currentdate = date.getFullYear() + seperator1 + month + seperator1 + strDate
+        alert(currentdate);
 
-             //发送一个Ajax请求
+
+        window.onload=function () {
+            $.post(
+                "sign.action",
+                {
+                    op: "signin",
+                    id: "${sessionScope.user.id}",
+                    mark:"no",
+                    tdate:date.getFullYear()+"-"+date.getMonth()+"-"+date.getDay()
+                },
+                function (result) {
+                    console.log(result);
+                    if(result =='1'){
+                        $("#sign").hide();
+                        $("#dissign").show();
+
+                    }
+
+                }
+            );
+        }
+
+
+
+
+        $("#sign").click(function () {
+            $.post(
+                "sign.action",
+                {
+                    op: "signin",
+                    id: "${sessionScope.user.id}",
+                    mark:"ok"
+                },
+                function (result) {
+                    if (result == 'yes') {
+                        alert("签到成功");
+                        $("#sign").hide();
+                        $("#dissign").show();
+                    } else {
+                        alert(result);
+                        alert("签到失败");
+                    }
+                }
+            );
+
+
+
+            //发送一个Ajax请求
             // $.ajax({
             //     type:"POST",
             //     data:{
@@ -65,7 +126,6 @@
             //         }
             //     }
             // })
-
 
 
         })

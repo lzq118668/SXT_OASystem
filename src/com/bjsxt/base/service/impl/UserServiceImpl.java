@@ -20,4 +20,16 @@ public class UserServiceImpl implements UserService {
         User user = mapper.selUser(auth, password);
         return user;
     }
+
+    @Override
+    public int insUser(int id, String phone, String qq, String contacts) {
+        UserMapper mapper = MyBatisUtil.getSession().getMapper(UserMapper.class);
+        return mapper.updUser(id, phone, qq, contacts);
+    }
+
+    @Override
+    public User selUserById(int id) {
+        UserMapper mapper = MyBatisUtil.getSession().getMapper(UserMapper.class);
+        return mapper.selUserById(id);
+    }
 }

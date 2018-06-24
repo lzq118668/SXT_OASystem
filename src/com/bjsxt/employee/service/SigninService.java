@@ -38,7 +38,7 @@ public interface SigninService {
 
 
     /**
-     * 根据日期查看当天的签到信息， 获取当天签到记录ID
+     * 根据日期查看当天的签到信息， 获取当天签到记录ID,（单条）
      *
      *@author leo
      *@param date

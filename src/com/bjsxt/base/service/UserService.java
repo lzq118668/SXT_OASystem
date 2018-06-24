@@ -12,4 +12,18 @@ public interface UserService {
     *@return {@link User}
     */
     User selUser(String auth,String password);
+
+    /**
+    * 修改个人信息。
+    *
+    *@author leo
+    *@param id
+    *@param phone
+    *@param qq
+    *@param contacts
+    *@return int
+    */
+    int insUser(int id,String phone,String qq,String contacts);
+
+    User selUserById(int id);
 }
