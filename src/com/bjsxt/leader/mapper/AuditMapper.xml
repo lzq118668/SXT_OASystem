@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bjsxt.leader.mapper.AuditMapper">
+    <resultMap id="amap" type="audit"  >
+        <id property="id" column="id"></id>
+        <result property="money" column="money"></result>
+        <result property="bDate" column="bdate"></result>
+        <result property="auditDate" column="auditdate"></result>
+        <result property="bname" column="name" ></result>
+        <result property="remark" column="remark"></result>
+        <result property="auditResult" column="auditresult"></result>
+        <result property="type" column="type"></result>
+        <collection property="reimItems" javaType="list" ofType="reimitem" >
+            <id property="id" column="rid"></id>
+            <result property="money" column="money"></result>
+            <result property="type" column="type"></result>
+            <result property="remark" column="remark"></result>
+
+        </collection>
+
+    </resultMap>
+
+<!--    /**
+    * 我的审批历史的查询具体的报销项
+    * @param id 传入的报销人的id
+    * @return-->
+    <select id="selAuditMx" resultMap="amap">
+    <!--<select id="selAuditMx" resultType="Audit">-->
+    select r.id,r1.type,r1.money,r.bdate,a.auditdate,a.auditresult,r1.remark
+    from t_audit a
+    LEFT JOIN t_reimburse r
+    on r.id=a.bid
+    LEFT JOIN t_user u
+    on r.bid=u.id
+    LEFT JOIN t_reimbursetype r1
+    on r1.bid=r.id
+    where u.id=#{id}
+    </select>
+
+
+    <select id="selReimMx" resultType="ReimItem">
+         select r.id,r1.type,r.money,r.remark
+        from t_reimburse r
+        LEFT JOIN t_reimbursetype r1
+        on r1.bid=r.id
+        LEFT JOIN t_user u
+        on r.bid=u.id
+        where u.id=#{id}
+
+    </select>
+    <!--    /**
+        * 我的待审报销的查询具体的报销项
+        * @param id 传入的报销人的id
+        * @return-->
+    <select id="selReimMxW" resultType="ReimItem">
+     select r.id , u.id,u.name,r.money,r.bdate bxdate ,a.auditdate,r1.remark,r1.type,r.id rid,a.auditresult
+    from t_reimburse r
+    LEFT JOIN t_user u
+    on r.bid=u.id
+    LEFT JOIN t_reimbursetype r1
+    on r.id=r1.bid
+    LEFT JOIN t_audit a
+    on a.bid=r.id
+    where u.id=#{id} and (a.auditstatus="未审核" or a.auditstatus is null)
+
+</select>
+      <select id="selHisByBid" resultType="audit">
+          select u.`name` sname,a.auditresult,a.auditdate,a.auditmark
+         from t_audit a
+         LEFT JOIN t_reimburse r
+         on r.id=a.bid
+         LEFT JOIN t_user u
+         on  a.sid=u.id
+         where r.bid=#{id}
+
+      </select>
+     <!--审批的方法-->
+    <insert id="auditAdd" >
+        insert into t_audit values(default,#{bid},#{sid},NOW(),#{mark} ,#{result},"已审核")
+
+    </insert>
+
+</mapper>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ <mapper namespace="com.bjsxt.leader.mapper.AuditHisMapper">
+    <resultMap id="amap" type="audit"  >
+        <id property="id" column="id"></id>
+        <!--<result property="money" column="money"></result>-->
+        <result property="bDate" column="bdate"></result>
+        <result property="auditDate" column="auditdate"></result>
+        <result property="bname" column="name" ></result>
+        <result property="remark" column="remark"></result>
+        <result property="auditResult" column="auditresult"></result>
+        <collection property="reimItems" javaType="list" ofType="reimitem" >
+            <id property="id" column="rid"></id>
+            <result property="money" column="money"></result>
+            <result property="type" column="type"></result>
+            <result property="remark" column="remark"></result>
+        </collection>
+
+    </resultMap>
+
+    <select id="selReimHis" resultMap="amap" >
+        select u.id, u.name,r.money,r.bdate,a.auditdate,r.remark,r1.type,r.id rid,a.auditresult
+        from t_reimburse r
+        LEFT JOIN t_user u
+        on r.bid=u.id
+         LEFT JOIN t_reimbursetype r1
+         on r.id=r1.bid
+        LEFT JOIN t_audit a
+        on a.bid=r.id
+        where r.sid=#{id}  and a.auditstatus="已审核"
+
+    </select>
+
+
+
+</mapper>
