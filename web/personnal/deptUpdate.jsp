@@ -6,14 +6,17 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>无标题文档</title>
-<link href="css/style.css" rel="stylesheet" type="text/css" />
+<link href="../../css/style.css" rel="stylesheet" type="text/css" />
     <script type="text/javascript" src=../../js/jquery.js""></script>
     <script type="text/javascript">
-         $(".btn").click(function () {
-            var fm= document.getElementById("fm");
-            fm.submit();
-            alert("helloweodl");
-         });
+     /*  $(function () {
+           $("#btn").click(function () {
+               var fm= document.getElementById("fm");
+               fm.submit();
+               alert("helloweodl");
+           });
+       });*/
+
     </script>
 </head>
 
@@ -30,7 +33,8 @@
     <div class="formbody">
     
     <div class="formtitle"><span>基本信息</span></div>
-    <form action="dept.action?op=updDept" id="fm">
+    <form action="../../dept.action" id="fm">
+        <input type="hidden" name="op" value="updDept"/>
             <ul class="forminfo">
                 <%
                     String id=request.getParameter("id");
@@ -40,11 +44,12 @@
                     pageContext.setAttribute("dname",dname);
                     pageContext.setAttribute("loc",loc);
                 %>
-            <li><label>部门编号</label><input name="id" type="text" class="dfinput" value="${pageScope.id}"/> </li>
-            <li><label>部门名称</label><input name="dname" type="text" class="dfinput"  value="${pageScope.dname}"/></li>
-            <li><label>办公地点</label><input name="loc" type="text" class="dfinput" value="${pageScope.loc}"/></li>
-            <li><label>&nbsp;</label><input name="" type="button" class="btn" value="确认保存"/></li>
-    </ul>
+                <li><label>部门编号</label><input name="id" type="text" class="dfinput" value="${pageScope.id}" readonly/> </li>
+                <li><label>部门名称</label><input name="dname" type="text" class="dfinput"  value="${pageScope.dname}"/></li>
+                <li><label>办公地点</label><input name="loc" type="text" class="dfinput" value="${pageScope.loc}"/></li>
+               <li><label>&nbsp;</label><input name="" id="btn" type="submit" class="btn"  value="确认保存"/></li>
+               <%-- <li><label>&nbsp;</label><input type="submit" value="确认保存"/></li>--%>
+         </ul>
     </form>
     
     </div>

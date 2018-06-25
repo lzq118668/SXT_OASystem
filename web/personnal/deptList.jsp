@@ -67,7 +67,7 @@ $(document).ready(function(){
                         <td>${d.id}</td>
                         <td>${d.name}</td>
                         <td>${d.loc}</td>
-                        <td><a href="deptUpdate.jsp?id=${d.id}&dname=${d.name}&loc=${d.loc}" class="tablelink">修改</a> &nbsp;&nbsp;&nbsp;&nbsp;  <a href="#" class="tablelink click"> 删除</a></td>
+                        <td><a href="deptUpdate.jsp?id=${d.id}&dname=${d.name}&loc=${d.loc}" class="tablelink">修改</a> &nbsp;&nbsp;&nbsp;&nbsp;  <a href="../../dept.action?op=delDept&id=${d.id}" <%--class="tablelink click"--%> onclick="return alert('确认要删除${d.name}吗')"> 删除</a></td>
                     </tr>
 
                 </c:forEach>

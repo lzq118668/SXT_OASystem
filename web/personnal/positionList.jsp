@@ -51,6 +51,7 @@ $(document).ready(function(){
    
     <table class="tablelist" >
     	<thead>
+
     	<tr>
         <th><input name="" type="checkbox" value="" checked="checked"/></th>
         <th>编号<i class="sort"><img src="../../images/px.gif" /></i></th>
@@ -61,37 +62,19 @@ $(document).ready(function(){
         </thead>
         
         <tbody>
-        <tr>
-        <td><input name="" type="checkbox" value="" /></td>
-        <td>1</td>
-        <td>总裁</td>
-        <td>公司总体发展战略规划和管理</td>
-        <td>  <a href="positionUpdate.html" class="tablelink">修改</a>   <a href="#" class="tablelink click"> 删除</a></td>
-        </tr> 
+        <c:forEach items="${sessionScope.jobs}" var="j" >
+            <tr>
+                <td><input name="" type="checkbox" value="" /></td>
+                <td>${j.id}</td>
+                <td>${j.jname}</td>
+                <td>${j.jmark}</td>
+                <td>  <a href="positionUpdate.jsp?id=${j.id}&jname=${j.jname}&jmark=${j.jmark}" class="tablelink">修改</a>   <a href="../../job.action?op=delJob&id=${j.id}" <%--class="tablelink click"--%> onclick="return alert('确认要删除${j.jname}吗')"> 删除</a></td>
+            </tr>
+
+        </c:forEach>
+
         
-        <tr>
-        <td><input name="" type="checkbox" value="" /></td>
-        <td>2</td>
-        <td>教学经理</td>
-        <td>负责日常教学管理</td>
-        <td> <a href="positionUpdate.html" class="tablelink">修改</a>   <a href="#" class="tablelink click"> 删除</a></td>
-        </tr>
-        
-        <tr>
-        <td><input name="" type="checkbox" value="" /></td>
-        <td>3</td>
-        <td>咨询经理</td>
-        <td>完成咨询部日常管理</td>
-        <td><a href="positionUpdate.html" class="tablelink">修改</a>   <a href="#" class="tablelink"> 删除</a></td>
-        </tr>
-        
-        <tr>
-        <td><input name="" type="checkbox" value="" /></td>
-        <td>4</td>
-        <td>咨询师</td>
-        <td>完成日常咨询任务</td>
-        <td>  <a href="positionUpdate.html" class="tablelink">修改</a>   <a href="#" class="tablelink"> 删除</a></td>
-        </tr>
+
         </tbody>
     </table>
     

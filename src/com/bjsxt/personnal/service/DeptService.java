@@ -20,4 +20,18 @@ public interface DeptService {
      * @return
      */
     int updDept(int id,  String dname, String loc);
+
+    /**
+     * 删除部门
+     * @param id
+     * @return
+     */
+    int delDept(@Param("id") int id);
+
+    /**
+     * 添加部门
+     * @param dept
+     * @return
+     */
+    int addDept(Dept dept);
 }

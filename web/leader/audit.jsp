@@ -16,12 +16,8 @@
 
 				$(".btn").click(function () {
 					var form=document.getElementById("fm");
-					//alert("helloword");
-                       form.submit();
-                    //alert("helloword");
-					//window.close();
-                    //window.open("about:blank","_self").close();
 
+                       form.submit();
                 })
             });
 			

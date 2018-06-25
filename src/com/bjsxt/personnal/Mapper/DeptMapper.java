@@ -1,9 +1,7 @@
 package com.bjsxt.personnal.Mapper;
 
 import com.bjsxt.personnal.pojo.Dept;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -22,4 +20,20 @@ public interface DeptMapper {
      */
     @Update("update t_dept set dname=#{dname},loc=#{loc} where id=#{id}")
     int updDept(@Param("id") int id,@Param("dname") String dname,@Param("loc") String loc);
+
+    /**
+     * 删除部门
+     * @param id
+     * @return
+     */
+    @Delete("delete from t_dept where id=#{id};")
+    int deLDept(@Param("id") int id);
+
+    /**
+     * 添加部门
+     * @param dept
+     * @return
+     */
+    @Insert("insert into t_dept values (#{id},#{dname},#{loc})")
+    int addDept(Dept dept);
 }

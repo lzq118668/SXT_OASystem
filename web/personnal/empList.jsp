@@ -1,229 +1,272 @@
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<base href="${pageContext.request.contextPath }/" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="../themes/default/easyui.css" />
+<link rel="stylesheet" href="../themes/icon.css" />
+<script type="text/javascript" src="/js/jquery.min.js"></script>
+<script type="text/javascript" src="/js/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="/js/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript"> 
+	$(function(){
+		$("#table").datagrid({
+            "url":"emp.action",
+            "title":"员工表明细",
+            "queryParams":{"op":"selUser"},
+            "columns":[[
+                {field:'username',title:'用户名',width:100,align:'center'},
+                {field:'name',title:'真实姓名',width:100,align:'center'},
+                {field:'did',title:'所属部门编号',width:100,align:'center'},
+                {field:'dname',title:'部门名称',width:100,align:'center'},
+                {field:'jid',title:'所属岗位编号',width:100,align:'center'},
+                {field:'jname',title:'岗位名称',width:100,align:'center'},
+                {field:'hiredate',title:'入职时间',width:100,align:'center'},
+                {field:'phone',title:'联系方式',width:100,align:'center'},
+                {field:'contacts',title:'紧急联系人',width:100,align:'center'},
+                {field:'mgr',title:'上级编号',width:100,align:'center'},
+                {field:'rid',title:'角色编号',width:100,align:'center'}
+            ]],
+            "fitColumns":true,
+            "striped":true,
+            "rownumbers":true,
+            "fit":true,
+            "singleSelect":true,
+            "toolbar": "#dg"
+        });
+      /*  // 加载所有的部门信息
+        $("#dept").combobox({
+            "url":"dept.action",
+            "queryParams":{"op":"sel","some":"sel"},
+            "textField":"name",
+            "valueField":"id",
+            "editable":false,
+            "onLoadSuccess":function(){
+                var a=$(this).combobox("getData");
+                for(var items in a[0]){
+                    if(items=="id"){
+                        $(this).combobox("select",a[0][items])
+                    }
+                }
+            }
+        });*/
+        //给查询按钮绑定点击事件
+        $("#btnSearch").click(function(){
+            $("#table").datagrid("load",{
+                "url":"emp.action",
+                "op":"selUser",
+                "username":$("#username").val(),
+               /* "did":$("#dept").val(),*/
+                "isjob":$('input:radio:checked').val(),
+                "hiredate":$("#hiredate").val()
+            });
+        });
+        //给删除按钮绑定事件
+        $("#btnDel").click(function(){
+            var selected = $("#table").datagrid("getSelected");
+            var msg="";
+            if(selected==null) {
+                msg = "请先选中，在进行删除操作";
+                $.messager.alert("警告",msg,"warning");
+            }else {
+                $.messager.confirm("确认", "确认删除" + selected.name + "的用户信息吗？", function (r) {
+                    if (r) {
+                        $.get("emp.action", {"op": "delUser", "id": selected.id}, function (result) {
+                            var msg = "";
+                            if (result > 0) {
+                                msg = "删除成功!";
+                                $("#table").datagrid("reload");
+                            } else {
+                                msg = "删除失败";
+                            }
+                            $.messager.show({
+                                "title": "系统消息",
+                                "msg": msg,
+                                "timeout": 2000,
+                                "showType": "slide"
+                            });
+                        });
+                    }
+                });
+            }
+        });
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
 
-	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-		<title>无标题文档</title>
-		<link href="../../css/style.css" rel="stylesheet" type="text/css" />
-		<link href="../../css/select.css" rel="stylesheet" type="text/css" />
+        //给修改按钮绑定事件
+        $("#btnUpd").click(function() {
+            // 获取选中的行
+            var selected = $("#table").datagrid("getSelected");
+            if(selected == null) {
+                $.messager.alert("警告", "请先选中再修改!", "warning");
+            } else {
+                // 显示修改窗口
+                $("#updDl").dialog({
+                    title: '修改用户表信息',
+                    width: 400,
+                    height: 400,
+                    closed: false,
+                    modal: true,
+                    buttons: "#btn"
+                });
+              /*  // 修改用户信息时的部门下拉列表
+                $("#did").combobox({
+                    "url": "dept.action",
+                    "queryParams": {"op": "sel"},
+                    "textField": "name",
+                    "valueField": "id",
+                    "editable": false,
+                    "onLoadSuccess": function () {
+                        var val = $(this).combobox("getData");
+                        for (var i = 0; i < val.length; i++) {
+                            for (var item in val[i]) {
+                                if (item == "id" && val[i][item] == selected.id) {
+                                    $(this).combobox("select", val[i][item]);
+                                }
+                            }
+                        }
+                    }
+                });
+                // 修改用户信息时的部门下拉列表
+                $("#jid").combobox({
+                    "url": "job.action",
+                    "queryParams": {"op": "selJob"},
+                    "textField": "jname",
+                    "valueField": "id",
+                    "editable": false,
+                    "onLoadSuccess": function () {
+                        var val = $(this).combobox("getData");
+                        for (var i = 0; i < val.length; i++) {
+                            for (var item in val[i]) {
+                                if (item == "id" && val[i][item] == selected.id) {
+                                    $(this).combobox("select", val[i][item]);
+                                }
+                            }
+                        }
+                    }
+                });*/
+                //加载选中的用户信息
+                $("#fm").form("load", selected);
+            }
+        });
 
-		<script type="text/javascript" src="../../js/jquery.js"></script>
-		
-		<script type="text/javascript" src="../../js/jquery.idTabs.min.js"></script>
-		<script type="text/javascript" src="../../js/select-ui.min.js"></script>
-		<script type="text/javascript" src="../../editor/kindeditor.js"></script>
-		<script type="text/javascript">
-		$(document).ready(function(e) {
-		    $(".select1").uedSelect({
-				width : 200		  
-			});
-			
-		});
-		</script>
-		<script type="text/javascript">
-			$(document).ready(function(){
-			  $(".click").click(function(){
-			  $(".tip").fadeIn(200);
-			  });
-			  
-			  $(".tiptop a").click(function(){
-			  $(".tip").fadeOut(200);
-			});
-			
-			  $(".sure").click(function(){
-			  $(".tip").fadeOut(100);
-			});
-			
-			  $(".cancel").click(function(){
-			  $(".tip").fadeOut(100);
-			});
-			
-			});
-		</script>
-
-	</head>
-
-	<body>
-
-		<div class="place">
-			<span>位置：</span>
-			<ul class="placeul">
-				<li><a href="#">人事管理</a></li>
-				<li><a href="#">员工管理</a></li>
-			</ul>
-		</div>
-
-		<div class="rightinfo">
-
-			<ul class="prosearch">
-				<li>
-					<label>查询：</label><i>用户名</i>
-					<a>
-						<input name="" type="text" class="scinput" />
-					</a><i>所属部门</i>
-					<a>
-						<select class="select1">
-								<option>总裁办</option>
-								<option>教学部</option>
-								<option>咨询部</option>
-								<option>教务部</option>
-							</select>
-					</a>
-								
-				</li>
-				<li>
-					<label>是否在职：</label>
-					<input name="" type="radio" value="" checked="checked" />&nbsp;是&nbsp;&nbsp;
-					<input name="" type="radio" value="" />&nbsp;否				
-				</li>
-				<li>
-					<label>入职时间：</label>
-					<a>
-						<input name="" type="text" class="scinput" />
-					</a>		
-				</li>
-					<a>
-						<input name="" type="button" class="sure" value="查询" />
-					</a>
-			</ul>
-
-			<div class="formtitle1"><span>员工列表</span></div>
-
-			<table class="tablelist">
-				<thead>
-					<tr>
-						<th>
-							<input name="" type="checkbox" value="" checked="checked" />
-						</th>
-						<th>用户名<i class="sort"><img src="../../images/px.gif" /></i></th>
-						<th>真实姓名</th>
-						<th>所属部门</th>
-						<th>所属岗位</th>
-						<th>入职时间</th>
-						<th>联系方式</th>
-						<th>操作</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td>
-							<input name="" type="checkbox" value="" />
-						</td>
-						<td>gaoqi</td>
-						<td>高淇</td>
-						<td>总裁办</td>
-						<td>总裁</td>
-						<td>2007-10-1</td>
-						<td>12345678901</td>
-						<td>
-							<a href="empInfo.html" class="tablelink">查看</a> 
-							<a href="empUpdate.html" class="tablelink">修改</a> 
-							<a href="#" class="tablelink click"> 删除</a>
-							<a href="#" class="tablelink"> 重置密码</a>
-						</td>
-					</tr>
-
-					<tr>
-						<td>
-							<input name="" type="checkbox" value="" />
-						</td>
-						<td>liukaili</td>
-						<td>刘凯立</td>					
-						<td>教学部</td>
-						<td>教学经理</td>
-						<td>2012-5-1</td>
-						<td>12345678091</td>
-						<td>
-							<a href="empInfo.html" class="tablelink">查看</a> 
-							<a href="empUpdate.html" class="tablelink">修改</a> 
-							<a href="#" class="tablelink click"> 删除</a>
-							<a href="#" class="tablelink"> 重置密码</a>
-						</td>					
-					</tr>
-
-					<tr>
-						<td>
-							<input name="" type="checkbox" value="" />
-						</td>
-						<td>jiayanshuang</td>
-						<td>贾颜双</td>
-						<td>咨询部</td>
-						<td>咨询经理</td>
-						<td>2010-6-1</td>
-						<td>12345687901</td>
-						<td>
-							<a href="empInfo.html" class="tablelink">查看</a> 
-							<a href="empUpdate.html" class="tablelink">修改</a> 
-							<a href="#" class="tablelink click"> 删除</a>
-							<a href="#" class="tablelink"> 重置密码</a>
-						</td>					
-					</tr>
-
-					<tr>
-						<td>
-							<input name="" type="checkbox" value="" />
-						</td>
-						<td>gaojiazhi</td>
-						<td>高佳志</td>
-						<td>教学部</td>
-						<td>讲师</td>
-						<td>2013-8-1</td>
-						<td>143244567675</td>
-						<td>
-							<a href="empInfo.html" class="tablelink">查看</a> 
-							<a href="empUpdate.html" class="tablelink">修改</a> 
-							<a href="#" class="tablelink click"> 删除</a>
-							<a href="#" class="tablelink"> 重置密码</a>
-						</td>					
-					</tr>
-
-				</tbody>
+        //给修改框中的修改按钮绑定事件
+        $("#btnUpd1").click(function(){
+            var selected = $("#table").datagrid("getSelected");
+            $("#fm").form("submit", {
+                "url":"emp.action",
+                "queryParams":{"op":"updUser","id":selected.id},
+                "success":function(data) {
+                    var msg = "";
+                    if(data > 0) {
+                        msg = "修改成功!";
+                        // 关闭修改窗口
+                        $("#updDl").dialog("close");
+                        // 刷新表格数据
+                        $("#table").datagrid("reload");
+                    } else {
+                        msg = "修改失败!";
+                    }
+                    $.messager.show({
+                        "title":"系统消息",
+                        "msg":msg,
+                        "timeout":2000,
+                        "showType":"slide"
+                    });
+                }
+            });
+        });
+        // 给取消按钮绑定事件
+        $("#btnCancel").click(function() {
+            $("#updDl").dialog("close");
+        });
+    });
+</script>
+</head>
+<body>
+<table id="table"></table>
+<div id="dg">
+	用户名：<input id="username" class="easyui-textbox"   style="width: 200px;" />
+	<%--部门：<select name="dept" id="dept">
+			<option value="1">总裁办</option>
+			<option value="2">教学部</option>
+			<option value="3">咨询部</option>
+			<option value="4">教务部</option>
+</select>--%>
+	入职时间：<input id="hiredate" class="easyui-datebox"  style="width: 200px;" />
+	是否在职：<span > <input type="radio" name="isjob" value="0" >否</input>
+	<input type="radio" name="isjob" value="1" checked>是</input>
+			</span>
+	<a id="btnSearch" href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-search'">查询</a>
+	<a id="btnUpd" href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-search'">修改</a>
+	<a id="btnDel" href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-cancel'">删除</a>
+</div>
+<div id="updDl">
+	<center>
+		<form id="fm" method="post" style="margin-top: 20px;">
+			<table>
+			<tr>
+				<td>用户名:</td>
+				<td><input class="easyui-textbox"  name="username" style="width: 300px;" /></td>
+			</tr>
+			<tr>
+				<td>真实姓名:</td>
+				<td><input class="easyui-textbox"  data-options="readonly:true" name="name" style="width: 300px;" /></td>
+			</tr>
+			<tr>
+				<td>部门编号:</td>
+				<td>
+					<select name="did1" id="did1">
+						<option value="1">总裁办</option>
+						<option value="2">教学部</option>
+						<option value="3">咨询部</option>
+						<option value="4">教务部</option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td>岗位编号:</td>
+				<td>
+					<select name="jid1" id="jdi1">
+						<option value="1">总裁</option>
+						<option value="2">教学经理</option>
+						<option value="3">咨询经理</option>
+						<option value="4">咨询师</option>
+						<option value="4">人事专员</option>
+						<option value="4">财务专员</option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td>生日:</td>
+				<td><input class="easyui-datebox" data-options="editable:false" name="birthday" style="width: 300px;" /></td>
+			</tr>
+			<tr>
+				<td>入职日期:</td>
+				<td><input class="easyui-datebox" data-options="editable:false" name="hiredate" style="width: 300px;" /></td>
+			</tr>
+			<tr>
+				<td>联系人电话:</td>
+				<td><input class="easyui-textbox"  name="phone" style="width: 300px;" /></td>
+			</tr>
+			<tr>
+				<td>QQ:</td>
+				<td><input class="easyui-textbox"  name="qq" style="width: 300px;" /></td>
+			</tr>
+			<tr>
+				<td>紧急联系人:</td>
+				<td><input class="easyui-textbox"  name="contacts" style="width: 300px;" /></td>
+			</tr>
 			</table>
-
-			<div class="pagin">
-				<div class="message">共<i class="blue">1256</i>条记录，当前显示第&nbsp;<i class="blue">2&nbsp;</i>页</div>
-				<ul class="paginList">
-					<li class="paginItem"><a href="javascript:;"><span class="pagepre"></span></a></li>
-					<li class="paginItem"><a href="javascript:;">1</a></li>
-					<li class="paginItem current"><a href="javascript:;">2</a></li>
-					<li class="paginItem"><a href="javascript:;">3</a></li>
-					<li class="paginItem"><a href="javascript:;">4</a></li>
-					<li class="paginItem"><a href="javascript:;">5</a></li>
-					<li class="paginItem more"><a href="javascript:;">...</a></li>
-					<li class="paginItem"><a href="javascript:;">10</a></li>
-					<li class="paginItem"><a href="javascript:;"><span class="pagenxt"></span></a></li>
-				</ul>
-			</div>
-
-			<div class="tip">
-				<div class="tiptop"><span>提示信息</span>
-					<a></a>
-				</div>
-
-				<div class="tipinfo">
-					<span><img src="images/ticon.png" /></span>
-					<div class="tipright">
-						<p>是否确认对信息的修改 ？</p>
-						<cite>如果是请点击确定按钮 ，否则请点取消。</cite>
-					</div>
-				</div>
-
-				<div class="tipbtn">
-					<input name="" type="button" class="sure" value="确定" />&nbsp;
-					<input name="" type="button" class="cancel" value="取消" />
-				</div>
-
-			</div>
-
-		</div>
-
-		<script type="text/javascript">
-			$('.tablelist tbody tr:odd').addClass('odd');
-		</script>
-
-	</body>
-
+		</form>
+	</center>
+</div>
+<div id="btn">
+	<a id="btnUpd1" href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-ok'">修改</a>
+	<a id="btnCancel" href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-cancel'">取消</a>
+</div>
+</body>
 </html>

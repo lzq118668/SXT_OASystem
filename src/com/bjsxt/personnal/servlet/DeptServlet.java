@@ -21,7 +21,16 @@ public class DeptServlet  extends BaseServlet {
      */
     public void sel(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         DeptService ds=new DeptServiceImpl();
+        String some=req.getParameter("some");
         List<Dept> depts = ds.selDept();
+        if("sel".equals(some)){
+            Dept dept=new Dept();
+            dept.setId(-1);
+            dept.setName("请选择");
+            depts.add(0,dept);
+        }
+
+
         req.getSession().setAttribute("depts",depts);
         resp.sendRedirect(req.getContextPath()+"personnal/deptList.jsp");
 
@@ -43,9 +52,47 @@ public class DeptServlet  extends BaseServlet {
         System.out.println(i);
         System.out.println(dname);
         System.out.println(loc);
-       // req.getSession().setAttribute("depts",depts);
-        resp.sendRedirect(req.getContextPath()+"personnal/deptList.jsp");
-
+       //
+        resp.sendRedirect(req.getContextPath()+"dept.action?op=sel");
 
     }
+
+    /**
+     * 删除部门
+     * @param req
+     * @param resp
+     * @throws IOException
+     */
+    public void delDept(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        int id=Integer.parseInt(req.getParameter("id"));
+        System.out.println(id);
+        DeptService ds=new DeptServiceImpl();
+        int i = ds.delDept(id);
+        System.out.println(i);
+        resp.sendRedirect(req.getContextPath()+"dept.action?op=sel");
+
+    }
+
+    /**
+     * 添加部门
+     * @param req
+     * @param resp
+     * @throws IOException
+     */
+    public void  addDept(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        int id=Integer.parseInt(req.getParameter("id"));
+        String dname=req.getParameter("dname");
+        String  loc=req.getParameter("loc");
+        Dept dept=new Dept();
+        dept.setId(id);
+        dept.setName(dname);
+        dept.setLoc(loc);
+        DeptService ds=new DeptServiceImpl();
+        int i = ds.addDept(dept);
+        System.out.println(dept);
+        resp.sendRedirect(req.getContextPath()+"dept.action?op=sel");
+
+    }
+
+
 }
