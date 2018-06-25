@@ -44,5 +44,5 @@ public interface SigninService {
      *@param date
      *@return {@link Signin}
      */
-    Signin selToday(Date date);
+    Signin selToday(String date);
 }

@@ -43,7 +43,7 @@ public class UserServlet extends BaseServlet {
         System.out.println(checkcode);
         System.out.println(piccode);
         if (checkcode.equalsIgnoreCase(piccode)) {
-            resp.getWriter().print("ture");
+            resp.getWriter().print("true");
         } else {
             resp.getWriter().print("false");
         }
@@ -87,9 +87,28 @@ public class UserServlet extends BaseServlet {
 
     public void selUserById(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String id = req.getParameter("id");
-        
+        String opwd = req.getParameter("opwd");
+        String npwd = req.getParameter("npwd");
         User user = userService.selUserById(Integer.parseInt(id));
         req.getSession().setAttribute("user",user);
+        resp.setCharacterEncoding("UTF-8");
+        System.out.println(opwd);
+        System.out.println(user.getPassword());
+        System.out.println(opwd.equals(user.getPassword()));
+
+        if(opwd.equals(user.getPassword())){
+            int i = userService.updPwd(Integer.parseInt(id), npwd);
+            if(i>0){
+                resp.getWriter().print("修改成功。");
+
+            }else {
+                resp.getWriter().print("修改失败。");
+                resp.sendRedirect(req.getContextPath()+"Empoyee/myPwd.jsp");
+            }
+        }else {
+            resp.getWriter().print("原密码有误。");
+        }
+
 
     }
 }

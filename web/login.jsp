@@ -82,9 +82,8 @@
                 contentType:"application/x-www-form-urlencoded",
                 url : "login.action",
                 success : function (result) {
-                      console.log(result);
 
-                    if(result){  //flag
+                    if(result == "true"){  //flag
                         $("#fm").submit();
                     }else{
                         alert("验证码错误！");

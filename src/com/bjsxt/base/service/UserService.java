@@ -26,4 +26,6 @@ public interface UserService {
     int insUser(int id,String phone,String qq,String contacts);
 
     User selUserById(int id);
+
+    int updPwd(int id,String npwd);
 }
