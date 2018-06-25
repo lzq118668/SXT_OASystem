@@ -25,6 +25,5 @@
 	<mappers>
 		<package name="com.bjsxt.base.mapper" />
 		<package name="com.bjsxt.employee.mapper" />
-
 	</mappers>
 </configuration>

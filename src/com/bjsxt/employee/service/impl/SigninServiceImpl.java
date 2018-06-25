@@ -31,8 +31,9 @@ public class SigninServiceImpl implements SigninService {
     }
 
     @Override
-    public Signin selToday(Date date) {
+    public Signin selToday(String date) {
         SigninMapper mapper = MyBatisUtil.getSession().getMapper(SigninMapper.class);
+        System.out.println(date+"====================!!");
         return mapper.selToday(date);
     }
 }

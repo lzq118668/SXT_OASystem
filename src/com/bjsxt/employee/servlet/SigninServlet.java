@@ -19,6 +19,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 @WebServlet("/sign.action")
@@ -29,7 +31,7 @@ public class SigninServlet extends BaseServlet {
     private PrintWriter out = null;
 
 
-    public void signin(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+    public void signin(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException, ParseException {
 
         String id = req.getParameter("id");
         System.out.println(id);
@@ -45,17 +47,17 @@ public class SigninServlet extends BaseServlet {
 
         out = resp.getWriter();
 
-        if (mark == "no") {
+        if (mark.equals("no")) {
             //查询当天是否已经签到。
             String tdate = req.getParameter("tdate");
-            Signin signin1 = signinService.selToday(java.sql.Date.valueOf(tdate));
-
+            Signin signin1 = signinService.selToday(tdate);
+            System.out.println(java.sql.Date.valueOf(tdate).toString());
             if (signin1 != null) {
                 out.print("1");
             } else {
                 out.print("2");
             }
-        } else if (mark == "ok") {
+        } else if (mark.equals("ok")) {
             //插入当天签到数据。
             int i = signinService.insSign(signin);
 
@@ -63,11 +65,7 @@ public class SigninServlet extends BaseServlet {
                 //设置session的有效期为24小时，当天00：00时销毁。
                 req.getSession().setMaxInactiveInterval(60 * 24 * 60);
 
-                java.sql.Date date = java.sql.Date.valueOf(todaydate.toString());
-
-                Signin today = signinService.selToday(date);
-                //将当天的签到信息放入today对象传入前台。
-                req.getSession().setAttribute("today", today);
+                Signin today = signinService.selToday(todaydate.toString());
 
                 out.print("yes");
 
@@ -92,16 +90,21 @@ public class SigninServlet extends BaseServlet {
         SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
         String nowTime = timeFormat.format(new Date());
 
-        //获取当天签到的id。
-        Signin today = (Signin) req.getSession().getAttribute("today");
-        int id = today.getId();
-        String qddate = today.getQddate().toString();
+//        //获取当天签到的id。
+//        Signin today = (Signin) req.getSession().getAttribute("today");
+//        int id = today.getId();
+
+        String today = req.getParameter("today");
+
+        Signin signin = signinService.selToday(today);
+        resp.setCharacterEncoding("UTF-8");
+
         out = resp.getWriter();
-        if (qddate == null) {
+        if (signin == null) {
             out.print("请先签到再进行此操作！");
             req.getRequestDispatcher("Empoyee/dutyAdd.jsp");
         } else {
-            int i = signinService.insSignout(id + "");
+            int i = signinService.insSignout(signin.getId() + "");
             if (i > 0) {
                 out.print("签退成功!");
                 //过了11:30自动销毁session
@@ -123,19 +126,10 @@ public class SigninServlet extends BaseServlet {
         int uid = user.getId();
 
         List<Signin> signins = signinService.selSign(uid);
-
-//        for (Signin signina : signins) {
-//            signina.setAttdate(StrToDate(dateFormat.format(signina.getAttdate())));
-//            System.out.println(StrToDate(dateFormat.format(signina.getAttdate())));
-//            System.out.println(dateFormat.format(signina.getAttdate()));
-//        }
-
-
         req.getSession().setAttribute("signins", signins);
         Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
 
-
-
+        System.out.println(gson.toJson(signins));
         resp.getWriter().print(gson.toJson(signins));
 
         resp.sendRedirect(req.getContextPath() + "Empoyee/myDuty.jsp");

@@ -51,5 +51,5 @@ public interface SigninMapper {
     *@return {@link Signin}
     */
     @Select("select * from t_attendance where attdate=#{0}")
-    Signin selToday(Date date);
+    Signin selToday(String date);
 }

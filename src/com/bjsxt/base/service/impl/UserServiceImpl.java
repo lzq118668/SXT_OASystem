@@ -30,6 +30,13 @@ public class UserServiceImpl implements UserService {
     @Override
     public User selUserById(int id) {
         UserMapper mapper = MyBatisUtil.getSession().getMapper(UserMapper.class);
+
         return mapper.selUserById(id);
+    }
+
+    @Override
+    public int updPwd(int id,String npwd) {
+        UserMapper mapper = MyBatisUtil.getSession().getMapper(UserMapper.class);
+        return mapper.updPwd(id, npwd);
     }
 }

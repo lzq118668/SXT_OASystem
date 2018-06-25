@@ -76,11 +76,11 @@ public class DateUtil {
 
         new Timer().schedule(new TimerTask() {
 
-            @Override
-            public void run() {
-                session.invalidate();
+        @Override
+        public void run() {
+            session.invalidate();
 
-            }
-        }, b.getTime() - a.getTime());
-    }
+        }
+    }, b.getTime() - a.getTime());
+}
 }

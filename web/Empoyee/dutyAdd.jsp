@@ -46,6 +46,8 @@
 <script type="text/javascript">
 
     $(function () {
+
+        //字符串拼接成当日的yyyy-MM-dd的日期格式。
         var flag;
         var date = new Date();
         var seperator1 = "-";
@@ -59,31 +61,32 @@
             strDate = "0" + strDate;
         }
         var currentdate = date.getFullYear() + seperator1 + month + seperator1 + strDate
-        alert(currentdate);
 
 
-        window.onload=function () {
+        //页面加载判断是否签到。
+        window.onload = function () {
             $.post(
                 "sign.action",
                 {
                     op: "signin",
                     id: "${sessionScope.user.id}",
-                    mark:"no",
-                    tdate:date.getFullYear()+"-"+date.getMonth()+"-"+date.getDay()
+                    mark: "no",
+                    tdate: currentdate
                 },
                 function (result) {
                     console.log(result);
-                    if(result =='1'){
+                    if (result == '2') {
+                        $("#sign").show();
+                        $("#dissign").hide();
+
+                    } else {
                         $("#sign").hide();
                         $("#dissign").show();
-
                     }
 
                 }
             );
         }
-
-
 
 
         $("#sign").click(function () {
@@ -92,7 +95,7 @@
                 {
                     op: "signin",
                     id: "${sessionScope.user.id}",
-                    mark:"ok"
+                    mark: "ok"
                 },
                 function (result) {
                     if (result == 'yes') {
@@ -105,32 +108,24 @@
                     }
                 }
             );
-
-
-
-            //发送一个Ajax请求
-            // $.ajax({
-            //     type:"POST",
-            //     data:{
-            //         "op":"check",
-            //         "checkcode":$("#checkcode").val()
-            //     },
-            //     url : "login.action",
-            //     success : function (result) {
-            //         console.log(result);
-            //
-            //         if(result){  //flag
-            //             $("#fm").submit();
-            //         }else{
-            //             alert("验证码错误！");
-            //         }
-            //     }
-            // })
-
-
         })
-    })
 
+
+        $("#signout").click(function () {
+            $.post(
+                "sign.action",
+                {
+                    op: "signout",
+                    today:currentdate
+                },
+                function (result) {
+                      alert(result);
+                }
+            );
+        })
+
+
+    })
 
 </script>
 </html>

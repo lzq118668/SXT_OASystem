@@ -16,5 +16,8 @@ public interface UserMapper {
     @Update("update t_user set phone=#{1},qq=#{2},contacts=#{3} where id=#{0}")
     int updUser(int id,String phone,String qq,String contacts);
 
+    @Update("update t_user set password = #{1} where id=#{0}")
+    int updPwd(int id,String npwd);
+
 
 }
